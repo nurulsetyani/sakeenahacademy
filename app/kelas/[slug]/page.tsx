@@ -13,6 +13,14 @@ const ENROLLMENT_STATUS_LABEL: Record<string, string> = {
   expired: "Pendaftaran Kedaluwarsa",
 };
 
+const ENROLLMENT_STATUS_DESCRIPTION: Record<string, string> = {
+  pending_payment: "Lengkapi bukti transfer untuk mengaktifkan akses kelas.",
+  active: "Anda sudah terdaftar di kelas ini.",
+  completed: "Anda telah menyelesaikan kelas ini.",
+  rejected: "Pembayaran sebelumnya ditolak. Klik untuk mengajukan ulang.",
+  expired: "Pendaftaran Anda telah kedaluwarsa.",
+};
+
 export default async function KelasDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const supabase = await createClient();
@@ -31,6 +39,10 @@ export default async function KelasDetailPage({ params }: { params: Promise<{ sl
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  const { data: profile } = user
+    ? await supabase.from("profiles").select("role").eq("id", user.id).single()
+    : { data: null };
 
   const { data: enrollment } = user
     ? await supabase
@@ -88,9 +100,7 @@ export default async function KelasDetailPage({ params }: { params: Promise<{ sl
                   {ENROLLMENT_STATUS_LABEL[enrollment.status] ?? "Lihat di Kelas Saya"}
                 </Link>
                 <p className="mt-3 text-center text-xs text-parchment-400">
-                  {enrollment.status === "pending_payment"
-                    ? "Lengkapi bukti transfer untuk mengaktifkan akses kelas."
-                    : "Anda sudah terdaftar di kelas ini."}
+                  {ENROLLMENT_STATUS_DESCRIPTION[enrollment.status] ?? "Anda sudah terdaftar di kelas ini."}
                 </p>
               </>
             ) : !user ? (
@@ -100,6 +110,10 @@ export default async function KelasDetailPage({ params }: { params: Promise<{ sl
                 </Link>
                 <p className="mt-3 text-center text-xs text-parchment-400">Masuk atau daftar akun untuk melanjutkan.</p>
               </>
+            ) : profile?.role !== "murid" ? (
+              <p className="mt-5 text-center text-sm text-parchment-500">
+                Hanya akun murid yang dapat mendaftar kelas ini.
+              </p>
             ) : course.access_type === "gratis" ? (
               <form action={enrollFreeCourse.bind(null, course.id, slug)}>
                 <button type="submit" className="btn-primary mt-5 w-full">Ikuti Kelas Gratis</button>

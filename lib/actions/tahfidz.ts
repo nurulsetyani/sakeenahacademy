@@ -16,7 +16,7 @@ export async function createTahfidzTarget(courseId: string, formData: FormData) 
   const ayatEnd = Number(formData.get("ayat_end") ?? 0);
   const targetDate = String(formData.get("target_date") ?? "").trim() || null;
 
-  if (!studentId || !surah || !ayatStart || !ayatEnd) {
+  if (!studentId || !surah || !Number.isInteger(ayatStart) || ayatStart < 1 || !Number.isInteger(ayatEnd) || ayatEnd < 1) {
     throw new Error("Semua field wajib diisi");
   }
 
@@ -50,7 +50,7 @@ export async function recordTahfidzSetoran(courseId: string, formData: FormData)
   const scoreRaw = formData.get("score");
   const notes = String(formData.get("notes") ?? "").trim() || null;
 
-  if (!studentId || !surah || !ayatStart || !ayatEnd) {
+  if (!studentId || !surah || !Number.isInteger(ayatStart) || ayatStart < 1 || !Number.isInteger(ayatEnd) || ayatEnd < 1) {
     throw new Error("Semua field wajib diisi");
   }
 

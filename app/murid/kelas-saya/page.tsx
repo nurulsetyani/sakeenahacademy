@@ -23,17 +23,19 @@ export default async function KelasSayaPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data: enrollments } = await supabase
+  const { data: rawEnrollments } = await supabase
     .from("enrollments")
     .select("id, status, progress_percentage, course:courses(id, title, slug, access_type, program_type)")
     .eq("student_id", user!.id)
     .order("created_at", { ascending: false });
 
+  const enrollments = (rawEnrollments ?? []).filter((e) => e.course !== null);
+
   return (
     <div>
       <h1 className="font-display text-2xl font-semibold text-brand-900">Kelas Saya</h1>
 
-      {enrollments && enrollments.length > 0 ? (
+      {enrollments.length > 0 ? (
         <div className="mt-6 space-y-3">
           {enrollments.map((e) => {
             const course = e.course as unknown as {

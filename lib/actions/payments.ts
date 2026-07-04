@@ -35,6 +35,8 @@ export async function registerPaidCourse(courseId: string, slug: string) {
       .single();
     if (error || !newEnrollment) throw new Error(error?.message ?? "Gagal mendaftar kelas");
     enrollment = newEnrollment;
+  } else if (enrollment.status === "active" || enrollment.status === "completed") {
+    redirect("/murid/kelas-saya");
   }
 
   const { data: latestPayment } = await supabase
@@ -88,7 +90,7 @@ export async function uploadPaymentProof(paymentId: string, formData: FormData) 
 
   if (uploadError) throw new Error(uploadError.message);
 
-  const { error } = await supabase
+  const { data: updated, error } = await supabase
     .from("payments")
     .update({
       channel_id: channelId,
@@ -96,9 +98,14 @@ export async function uploadPaymentProof(paymentId: string, formData: FormData) 
       status: "menunggu_verifikasi",
       submitted_at: new Date().toISOString(),
     })
-    .eq("id", paymentId);
+    .eq("id", paymentId)
+    .select("id")
+    .maybeSingle();
 
   if (error) throw new Error(error.message);
+  if (!updated) {
+    throw new Error("Pembayaran ini sudah diproses admin dan tidak bisa diperbarui lagi.");
+  }
 
   revalidatePath(`/murid/pembayaran/${paymentId}`);
   revalidatePath("/murid/pembayaran");

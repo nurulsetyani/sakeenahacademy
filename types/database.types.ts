@@ -312,6 +312,7 @@ export type Database = {
           student_id: string;
           course_id: string;
           status?: Database["public"]["Enums"]["enrollment_status"];
+          enrolled_at?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["enrollments"]["Insert"]>;
         Relationships: [];

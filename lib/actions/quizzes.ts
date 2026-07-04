@@ -93,8 +93,8 @@ export async function addQuizQuestion(quizId: string, courseId: string, formData
   if (!questionText) throw new Error("Pertanyaan wajib diisi");
 
   const options = [0, 1, 2, 3]
-    .map((i) => String(formData.get(`option_${i}`) ?? "").trim())
-    .filter((text) => text.length > 0);
+    .map((i) => ({ text: String(formData.get(`option_${i}`) ?? "").trim(), isCorrect: String(i) === correctIndex }))
+    .filter((opt) => opt.text.length > 0);
 
   if (options.length < 2) throw new Error("Minimal 2 opsi jawaban");
 
@@ -122,10 +122,10 @@ export async function addQuizQuestion(quizId: string, courseId: string, formData
   if (questionError || !question) throw new Error(questionError?.message ?? "Gagal menambah soal");
 
   const { error: optionsError } = await supabase.from("quiz_options").insert(
-    options.map((text, i) => ({
+    options.map((opt, i) => ({
       question_id: question.id,
-      option_text: text,
-      is_correct: String(i) === correctIndex,
+      option_text: opt.text,
+      is_correct: opt.isCorrect,
       order_index: i,
     }))
   );

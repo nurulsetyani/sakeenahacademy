@@ -2,14 +2,6 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import type { Database } from "@/types/database.types";
-
-// enrolled_at is a real, nullable column, but the generated Insert type omits it
-// (it's normally only set by the payment-approval trigger for paid courses). Free
-// courses have no such trigger, so we set it ourselves and bypass the stale type here.
-type EnrollmentInsert = Database["public"]["Tables"]["enrollments"]["Insert"] & {
-  enrolled_at?: string | null;
-};
 
 export async function enrollFreeCourse(courseId: string, slug: string) {
   const supabase = await createClient();
@@ -39,15 +31,12 @@ export async function enrollFreeCourse(courseId: string, slug: string) {
     .maybeSingle();
 
   if (!existing) {
-    const payload: EnrollmentInsert = {
+    const { error } = await supabase.from("enrollments").insert({
       student_id: user.id,
       course_id: courseId,
       status: "active",
       enrolled_at: new Date().toISOString(),
-    };
-    const { error } = await supabase
-      .from("enrollments")
-      .insert(payload as unknown as Database["public"]["Tables"]["enrollments"]["Insert"]);
+    });
     if (error) throw new Error(error.message);
   }
 

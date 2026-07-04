@@ -12,18 +12,16 @@ export default async function AdminPembayaranPage() {
     .eq("status", "menunggu_verifikasi")
     .order("submitted_at", { ascending: true });
 
-  const proofUrls = new Map(
-    await Promise.all(
-      (payments ?? [])
-        .filter((p) => p.proof_image_url)
-        .map(async (p) => {
-          const { data } = await supabase.storage
-            .from("payment-proofs")
-            .createSignedUrl(p.proof_image_url!, 3600);
-          return [p.id, data?.signedUrl ?? null] as const;
-        })
-    )
-  );
+  const proofPaths = (payments ?? [])
+    .map((p) => p.proof_image_url)
+    .filter((path): path is string => Boolean(path));
+
+  const { data: signedUrls } =
+    proofPaths.length > 0
+      ? await supabase.storage.from("payment-proofs").createSignedUrls(proofPaths, 3600)
+      : { data: [] };
+
+  const proofUrlByPath = new Map((signedUrls ?? []).map((s) => [s.path, s.signedUrl]));
 
   return (
     <div>
@@ -45,9 +43,9 @@ export default async function AdminPembayaranPage() {
                   <p className="mt-1 text-sm font-semibold text-brand-800">
                     Rp{Number(p.amount).toLocaleString("id-ID")}
                   </p>
-                  {proofUrls.get(p.id) && (
+                  {p.proof_image_url && proofUrlByPath.get(p.proof_image_url) && (
                     <a
-                      href={proofUrls.get(p.id)!}
+                      href={proofUrlByPath.get(p.proof_image_url)!}
                       target="_blank"
                       rel="noreferrer"
                       className="mt-2 inline-block text-sm font-semibold text-brand-700 underline hover:text-brand-600"
