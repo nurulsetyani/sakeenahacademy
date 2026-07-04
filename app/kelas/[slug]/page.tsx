@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PublicTopbar } from "@/components/landing/public-topbar";
 import { enrollFreeCourse } from "@/lib/actions/enrollment";
+import { registerPaidCourse } from "@/lib/actions/payments";
 
 const ENROLLMENT_STATUS_LABEL: Record<string, string> = {
   pending_payment: "Menunggu Pembayaran",
@@ -34,11 +35,22 @@ export default async function KelasDetailPage({ params }: { params: Promise<{ sl
   const { data: enrollment } = user
     ? await supabase
         .from("enrollments")
-        .select("status")
+        .select("id, status")
         .eq("student_id", user.id)
         .eq("course_id", course.id)
         .maybeSingle()
     : { data: null };
+
+  const { data: pendingPayment } =
+    enrollment && enrollment.status === "pending_payment"
+      ? await supabase
+          .from("payments")
+          .select("id")
+          .eq("enrollment_id", enrollment.id)
+          .order("attempt_number", { ascending: false })
+          .limit(1)
+          .maybeSingle()
+      : { data: null };
 
   return (
     <>
@@ -69,12 +81,15 @@ export default async function KelasDetailPage({ params }: { params: Promise<{ sl
             </p>
             {enrollment ? (
               <>
-                <Link href="/murid/kelas-saya" className="btn-primary mt-5 block w-full text-center">
+                <Link
+                  href={pendingPayment ? `/murid/pembayaran/${pendingPayment.id}` : "/murid/kelas-saya"}
+                  className="btn-primary mt-5 block w-full text-center"
+                >
                   {ENROLLMENT_STATUS_LABEL[enrollment.status] ?? "Lihat di Kelas Saya"}
                 </Link>
                 <p className="mt-3 text-center text-xs text-parchment-400">
                   {enrollment.status === "pending_payment"
-                    ? "Cek status pembayaran Anda di halaman Kelas Saya."
+                    ? "Lengkapi bukti transfer untuk mengaktifkan akses kelas."
                     : "Anda sudah terdaftar di kelas ini."}
                 </p>
               </>
@@ -90,10 +105,9 @@ export default async function KelasDetailPage({ params }: { params: Promise<{ sl
                 <button type="submit" className="btn-primary mt-5 w-full">Ikuti Kelas Gratis</button>
               </form>
             ) : (
-              <>
-                <Link href="/murid/pembayaran" className="btn-primary mt-5 block w-full text-center">Daftar Kelas Ini</Link>
-                <p className="mt-3 text-center text-xs text-parchment-400">Hubungi Admin untuk memproses pendaftaran kelas berbayar.</p>
-              </>
+              <form action={registerPaidCourse.bind(null, course.id, slug)}>
+                <button type="submit" className="btn-primary mt-5 w-full">Daftar Kelas Ini</button>
+              </form>
             )}
           </div>
         </div>

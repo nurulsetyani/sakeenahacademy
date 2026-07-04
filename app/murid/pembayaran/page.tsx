@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 
 const STATUS_LABEL: Record<string, string> = {
@@ -33,7 +34,11 @@ export default async function PembayaranPage() {
       {payments && payments.length > 0 ? (
         <div className="mt-6 space-y-3">
           {payments.map((p) => (
-            <div key={p.id} className="card-surface flex items-center justify-between p-5">
+            <Link
+              key={p.id}
+              href={`/murid/pembayaran/${p.id}`}
+              className="card-surface flex items-center justify-between p-5 transition-transform duration-200 ease-spring hover:-translate-y-0.5 hover:shadow-raised"
+            >
               <div>
                 <p className="font-display font-semibold text-brand-900">
                   {(p.course as unknown as { title: string } | null)?.title}
@@ -48,7 +53,7 @@ export default async function PembayaranPage() {
               <span className={`rounded-full px-3 py-1 text-xs font-semibold ${STATUS_STYLE[p.status]}`}>
                 {STATUS_LABEL[p.status]}
               </span>
-            </div>
+            </Link>
           ))}
         </div>
       ) : (

@@ -12,6 +12,19 @@ export default async function AdminPembayaranPage() {
     .eq("status", "menunggu_verifikasi")
     .order("submitted_at", { ascending: true });
 
+  const proofUrls = new Map(
+    await Promise.all(
+      (payments ?? [])
+        .filter((p) => p.proof_image_url)
+        .map(async (p) => {
+          const { data } = await supabase.storage
+            .from("payment-proofs")
+            .createSignedUrl(p.proof_image_url!, 3600);
+          return [p.id, data?.signedUrl ?? null] as const;
+        })
+    )
+  );
+
   return (
     <div>
       <h1 className="font-display text-2xl font-semibold text-brand-900">Verifikasi Pembayaran</h1>
@@ -32,9 +45,9 @@ export default async function AdminPembayaranPage() {
                   <p className="mt-1 text-sm font-semibold text-brand-800">
                     Rp{Number(p.amount).toLocaleString("id-ID")}
                   </p>
-                  {p.proof_image_url && (
+                  {proofUrls.get(p.id) && (
                     <a
-                      href={p.proof_image_url}
+                      href={proofUrls.get(p.id)!}
                       target="_blank"
                       rel="noreferrer"
                       className="mt-2 inline-block text-sm font-semibold text-brand-700 underline hover:text-brand-600"
