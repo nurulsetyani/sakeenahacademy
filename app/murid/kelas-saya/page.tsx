@@ -25,7 +25,7 @@ export default async function KelasSayaPage() {
 
   const { data: enrollments } = await supabase
     .from("enrollments")
-    .select("id, status, progress_percentage, course:courses(title, slug, access_type, program_type)")
+    .select("id, status, progress_percentage, course:courses(id, title, slug, access_type, program_type)")
     .eq("student_id", user!.id)
     .order("created_at", { ascending: false });
 
@@ -37,16 +37,22 @@ export default async function KelasSayaPage() {
         <div className="mt-6 space-y-3">
           {enrollments.map((e) => {
             const course = e.course as unknown as {
+              id: string;
               title: string;
               slug: string;
               access_type: string;
               program_type: string;
             } | null;
 
+            const href =
+              e.status === "active" || e.status === "completed"
+                ? `/murid/kelas-saya/${course?.id}`
+                : `/kelas/${course?.slug}`;
+
             return (
               <Link
                 key={e.id}
-                href={`/kelas/${course?.slug}`}
+                href={href}
                 className="card-surface block p-5 transition-transform duration-200 ease-spring hover:-translate-y-0.5 hover:shadow-raised"
               >
                 <div className="flex items-start justify-between gap-4">

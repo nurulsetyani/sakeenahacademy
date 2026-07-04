@@ -1,6 +1,13 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { toggleCourseStatus } from "@/lib/actions/course-status";
+import { createExamQuiz } from "@/lib/actions/quizzes";
+
+const CONTENT_STATUS_STYLE: Record<string, string> = {
+  published: "bg-brand-50 text-brand-700",
+  draft: "bg-parchment-200 text-parchment-600",
+};
 
 export default async function EditKelasPage({ params }: { params: Promise<{ courseId: string }> }) {
   const { courseId } = await params;
@@ -13,6 +20,20 @@ export default async function EditKelasPage({ params }: { params: Promise<{ cour
     .single();
 
   if (!course) notFound();
+
+  const [{ data: lessons }, { data: exams }] = await Promise.all([
+    supabase
+      .from("lessons")
+      .select("id, title, status, order_index")
+      .eq("course_id", courseId)
+      .order("order_index", { ascending: true }),
+    supabase
+      .from("quizzes")
+      .select("id, title, status")
+      .eq("course_id", courseId)
+      .eq("quiz_type", "ujian_akhir")
+      .order("created_at", { ascending: false }),
+  ]);
 
   return (
     <div className="max-w-xl">
@@ -45,9 +66,59 @@ export default async function EditKelasPage({ params }: { params: Promise<{ cour
         </form>
       </div>
 
-      <p className="mt-4 text-xs text-parchment-400">
-        Kelola materi, quiz, dan live class untuk kelas ini akan tersedia di iterasi berikutnya.
-      </p>
+      <div className="mt-8">
+        <div className="flex items-center justify-between">
+          <h2 className="font-display text-lg font-semibold text-brand-900">Materi</h2>
+          <Link href={`/guru/kelas/${courseId}/materi/baru`} className="text-sm font-semibold text-brand-700 hover:text-brand-600">
+            + Tambah Materi
+          </Link>
+        </div>
+
+        {lessons && lessons.length > 0 ? (
+          <div className="mt-3 space-y-2">
+            {lessons.map((l) => (
+              <Link
+                key={l.id}
+                href={`/guru/kelas/${courseId}/materi/${l.id}`}
+                className="card-surface flex items-center justify-between p-4 transition-transform duration-200 ease-spring hover:-translate-y-0.5 hover:shadow-raised"
+              >
+                <p className="text-sm font-semibold text-brand-900">{l.title}</p>
+                <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${CONTENT_STATUS_STYLE[l.status]}`}>
+                  {l.status}
+                </span>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-3 text-sm text-parchment-500">Belum ada materi.</p>
+        )}
+      </div>
+
+      <div className="mt-8">
+        <h2 className="font-display text-lg font-semibold text-brand-900">Ujian Akhir</h2>
+
+        {exams && exams.length > 0 && (
+          <div className="mt-3 space-y-2">
+            {exams.map((q) => (
+              <Link
+                key={q.id}
+                href={`/guru/kelas/${courseId}/quiz/${q.id}`}
+                className="card-surface flex items-center justify-between p-4 transition-transform duration-200 ease-spring hover:-translate-y-0.5 hover:shadow-raised"
+              >
+                <p className="text-sm font-semibold text-brand-900">{q.title}</p>
+                <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${CONTENT_STATUS_STYLE[q.status]}`}>
+                  {q.status}
+                </span>
+              </Link>
+            ))}
+          </div>
+        )}
+
+        <form action={createExamQuiz.bind(null, courseId)} className="card-surface mt-3 flex items-center gap-3 p-4">
+          <input name="title" required placeholder="Judul ujian akhir" className="field-input flex-1" />
+          <button type="submit" className="btn-secondary shrink-0 !py-2.5 text-sm">+ Buat Ujian</button>
+        </form>
+      </div>
     </div>
   );
 }
