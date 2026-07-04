@@ -2,6 +2,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PublicTopbar } from "@/components/landing/public-topbar";
+import { enrollFreeCourse } from "@/lib/actions/enrollment";
+
+const ENROLLMENT_STATUS_LABEL: Record<string, string> = {
+  pending_payment: "Menunggu Pembayaran",
+  active: "Sudah Terdaftar",
+  completed: "Sudah Selesai",
+  rejected: "Pembayaran Ditolak",
+  expired: "Pendaftaran Kedaluwarsa",
+};
 
 export default async function KelasDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -17,6 +26,19 @@ export default async function KelasDetailPage({ params }: { params: Promise<{ sl
   if (!course) notFound();
 
   const teacher = course.teacher as unknown as { full_name: string; bio: string | null } | null;
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { data: enrollment } = user
+    ? await supabase
+        .from("enrollments")
+        .select("status")
+        .eq("student_id", user.id)
+        .eq("course_id", course.id)
+        .maybeSingle()
+    : { data: null };
 
   return (
     <>
@@ -45,10 +67,34 @@ export default async function KelasDetailPage({ params }: { params: Promise<{ sl
             <p className="font-display text-2xl font-semibold text-brand-900">
               {course.access_type === "berbayar" ? `Rp${Number(course.price).toLocaleString("id-ID")}` : "Gratis"}
             </p>
-            <Link href="/login" className="btn-primary mt-5 w-full">
-              {course.access_type === "berbayar" ? "Daftar Kelas Ini" : "Ikuti Kelas Gratis"}
-            </Link>
-            <p className="mt-3 text-center text-xs text-parchment-400">Masuk atau daftar akun untuk melanjutkan.</p>
+            {enrollment ? (
+              <>
+                <Link href="/murid/kelas-saya" className="btn-primary mt-5 block w-full text-center">
+                  {ENROLLMENT_STATUS_LABEL[enrollment.status] ?? "Lihat di Kelas Saya"}
+                </Link>
+                <p className="mt-3 text-center text-xs text-parchment-400">
+                  {enrollment.status === "pending_payment"
+                    ? "Cek status pembayaran Anda di halaman Kelas Saya."
+                    : "Anda sudah terdaftar di kelas ini."}
+                </p>
+              </>
+            ) : !user ? (
+              <>
+                <Link href={`/login?redirect=/kelas/${slug}`} className="btn-primary mt-5 block w-full text-center">
+                  {course.access_type === "berbayar" ? "Daftar Kelas Ini" : "Ikuti Kelas Gratis"}
+                </Link>
+                <p className="mt-3 text-center text-xs text-parchment-400">Masuk atau daftar akun untuk melanjutkan.</p>
+              </>
+            ) : course.access_type === "gratis" ? (
+              <form action={enrollFreeCourse.bind(null, course.id, slug)}>
+                <button type="submit" className="btn-primary mt-5 w-full">Ikuti Kelas Gratis</button>
+              </form>
+            ) : (
+              <>
+                <Link href="/murid/pembayaran" className="btn-primary mt-5 block w-full text-center">Daftar Kelas Ini</Link>
+                <p className="mt-3 text-center text-xs text-parchment-400">Hubungi Admin untuk memproses pendaftaran kelas berbayar.</p>
+              </>
+            )}
           </div>
         </div>
       </main>
