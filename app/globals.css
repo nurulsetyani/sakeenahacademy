@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-parchment-50 text-parchment-900 font-body antialiased;
+  }
+
+  ::selection {
+    @apply bg-gold-300 text-brand-900;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand-700 px-6 py-3
+      font-body text-sm font-semibold text-parchment-50 shadow-soft
+      transition-transform duration-200 ease-spring
+      hover:-translate-y-0.5 hover:bg-brand-600 hover:shadow-raised
+      focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-400
+      active:translate-y-0 active:shadow-soft
+      disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-brand-700/20 bg-parchment-50 px-6 py-3
+      font-body text-sm font-semibold text-brand-800 shadow-soft
+      transition-transform duration-200 ease-spring
+      hover:-translate-y-0.5 hover:border-brand-700/40 hover:shadow-raised
+      focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-400
+      active:translate-y-0;
+  }
+
+  .card-surface {
+    @apply rounded-2xl border border-parchment-200 bg-white shadow-soft;
+  }
+
+  .field-label {
+    @apply mb-1.5 block text-sm font-medium text-parchment-800;
+  }
+
+  .field-input {
+    @apply w-full rounded-xl border border-parchment-300 bg-white px-4 py-2.5 text-parchment-900
+      placeholder:text-parchment-400
+      transition-colors duration-150
+      focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20;
+  }
+}
