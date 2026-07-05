@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { normalizePhone, isValidIndonesianPhone } from "@/lib/phone";
+import { PasswordInput } from "@/components/ui/password-input";
 
 export default function RegisterPage() {
   const [fullName, setFullName] = useState("");
@@ -86,7 +87,7 @@ export default function RegisterPage() {
 
         <div>
           <label htmlFor="password" className="field-label">Kata Sandi</label>
-          <input id="password" type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} className="field-input" placeholder="Minimal 8 karakter" />
+          <PasswordInput id="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} className="field-input" placeholder="Minimal 8 karakter" />
         </div>
 
         <div>
