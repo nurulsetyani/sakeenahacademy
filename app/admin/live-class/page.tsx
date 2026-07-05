@@ -9,32 +9,22 @@ const STATUS_STYLE: Record<string, string> = {
   dibatalkan: "bg-red-50 text-red-700",
 };
 
-export default async function GuruPresensiPage() {
+export default async function AdminLiveClassPage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
   const { data: courses } = await supabase
     .from("courses")
     .select("id, title")
-    .eq("teacher_id", user!.id)
     .order("created_at", { ascending: false });
 
-  const courseIds = (courses ?? []).map((c) => c.id);
-
-  const { data: sessions } =
-    courseIds.length > 0
-      ? await supabase
-          .from("live_sessions")
-          .select("id, title, platform, scheduled_at, duration_minutes, status, course:courses(title)")
-          .in("course_id", courseIds)
-          .order("scheduled_at", { ascending: false })
-      : { data: [] };
+  const { data: sessions } = await supabase
+    .from("live_sessions")
+    .select("id, title, platform, scheduled_at, duration_minutes, status, course:courses(title)")
+    .order("scheduled_at", { ascending: false });
 
   return (
     <div>
-      <h1 className="font-display text-2xl font-semibold text-brand-900">Presensi</h1>
+      <h1 className="font-display text-2xl font-semibold text-brand-900">Live Class</h1>
       <p className="mt-1 text-sm text-parchment-500">Jadwalkan kelas live dan kelola presensi murid.</p>
 
       {courses && courses.length > 0 ? (
@@ -79,7 +69,7 @@ export default async function GuruPresensiPage() {
         </div>
       ) : (
         <div className="card-surface mt-6 p-14 text-center">
-          <p className="text-sm text-parchment-600">Anda belum memiliki kelas.</p>
+          <p className="text-sm text-parchment-600">Belum ada kelas.</p>
         </div>
       )}
 
@@ -88,7 +78,7 @@ export default async function GuruPresensiPage() {
           {sessions.map((s) => (
             <Link
               key={s.id}
-              href={`/guru/presensi/${s.id}`}
+              href={`/admin/live-class/${s.id}`}
               className="card-surface flex items-center justify-between p-5 transition-transform duration-200 ease-spring hover:-translate-y-0.5 hover:shadow-raised"
             >
               <div>

@@ -1,10 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { updateLesson, toggleLessonStatus } from "@/lib/actions/lessons";
-import { createLessonQuiz } from "@/lib/actions/quizzes";
 
-export default async function EditMateriPage({
+export default async function AdminEditMateriPage({
   params,
 }: {
   params: Promise<{ courseId: string; lessonId: string }>;
@@ -20,12 +18,6 @@ export default async function EditMateriPage({
     .single();
 
   if (!lesson) notFound();
-
-  const { data: quiz } = await supabase
-    .from("quizzes")
-    .select("id, title, status")
-    .eq("lesson_id", lessonId)
-    .maybeSingle();
 
   return (
     <div className="max-w-xl">
@@ -72,25 +64,6 @@ export default async function EditMateriPage({
           {lesson.status === "published" ? "Jadikan Draft" : "Publish Materi"}
         </button>
       </form>
-
-      <div className="mt-8">
-        <h2 className="font-display text-lg font-semibold text-brand-900">Quiz Materi</h2>
-        {quiz ? (
-          <Link
-            href={`/guru/kelas/${courseId}/quiz/${quiz.id}`}
-            className="card-surface mt-3 flex items-center justify-between p-4 transition-transform duration-200 ease-spring hover:-translate-y-0.5 hover:shadow-raised"
-          >
-            <p className="text-sm font-semibold text-brand-900">{quiz.title}</p>
-            <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${quiz.status === "published" ? "bg-brand-50 text-brand-700" : "bg-parchment-200 text-parchment-600"}`}>
-              {quiz.status}
-            </span>
-          </Link>
-        ) : (
-          <form action={createLessonQuiz.bind(null, courseId, lessonId)} className="mt-3">
-            <button type="submit" className="btn-secondary">+ Buat Quiz Materi</button>
-          </form>
-        )}
-      </div>
     </div>
   );
 }

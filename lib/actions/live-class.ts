@@ -28,7 +28,7 @@ export async function createLiveSession(formData: FormData) {
 
   if (error) throw new Error(error.message);
 
-  revalidatePath("/guru/presensi");
+  revalidatePath("/admin/live-class");
 }
 
 export async function updateLiveSession(sessionId: string, formData: FormData) {
@@ -48,8 +48,8 @@ export async function updateLiveSession(sessionId: string, formData: FormData) {
 
   if (error) throw new Error(error.message);
 
-  revalidatePath("/guru/presensi");
-  revalidatePath(`/guru/presensi/${sessionId}`);
+  revalidatePath("/admin/live-class");
+  revalidatePath(`/admin/live-class/${sessionId}`);
 }
 
 export async function saveLiveAttendance(sessionId: string, studentId: string, formData: FormData) {
@@ -67,7 +67,7 @@ export async function saveLiveAttendance(sessionId: string, studentId: string, f
 
   if (error) throw new Error(error.message);
 
-  revalidatePath(`/guru/presensi/${sessionId}`);
+  revalidatePath(`/admin/live-class/${sessionId}`);
 }
 
 export async function selfCheckIn(sessionId: string) {

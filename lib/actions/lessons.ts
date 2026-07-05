@@ -36,8 +36,8 @@ export async function createLesson(courseId: string, formData: FormData) {
 
   if (error) throw new Error(error.message);
 
-  revalidatePath(`/guru/kelas/${courseId}/edit`);
-  redirect(`/guru/kelas/${courseId}/edit`);
+  revalidatePath(`/admin/kelas/${courseId}/edit`);
+  redirect(`/admin/kelas/${courseId}/edit`);
 }
 
 export async function updateLesson(lessonId: string, courseId: string, formData: FormData) {
@@ -64,8 +64,8 @@ export async function updateLesson(lessonId: string, courseId: string, formData:
 
   if (error) throw new Error(error.message);
 
-  revalidatePath(`/guru/kelas/${courseId}/materi/${lessonId}`);
-  revalidatePath(`/guru/kelas/${courseId}/edit`);
+  revalidatePath(`/admin/kelas/${courseId}/materi/${lessonId}`);
+  revalidatePath(`/admin/kelas/${courseId}/edit`);
 }
 
 export async function toggleLessonStatus(lessonId: string, courseId: string, currentStatus: string) {
@@ -75,6 +75,6 @@ export async function toggleLessonStatus(lessonId: string, courseId: string, cur
   const { error } = await supabase.from("lessons").update({ status: nextStatus }).eq("id", lessonId);
   if (error) throw new Error(error.message);
 
-  revalidatePath(`/guru/kelas/${courseId}/materi/${lessonId}`);
-  revalidatePath(`/guru/kelas/${courseId}/edit`);
+  revalidatePath(`/admin/kelas/${courseId}/materi/${lessonId}`);
+  revalidatePath(`/admin/kelas/${courseId}/edit`);
 }

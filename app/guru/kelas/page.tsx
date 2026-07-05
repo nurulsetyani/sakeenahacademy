@@ -15,15 +15,13 @@ export default async function GuruKelasListPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl font-semibold text-brand-900">Kelola Kelas</h1>
-        <Link href="/guru/kelas/baru" className="btn-primary !px-5 !py-2.5 text-sm">+ Kelas Baru</Link>
-      </div>
+      <h1 className="font-display text-2xl font-semibold text-brand-900">Tugas &amp; Quiz</h1>
+      <p className="mt-1 text-sm text-parchment-500">Kelas yang menjadi tanggung jawab Anda.</p>
 
       {courses && courses.length > 0 ? (
         <div className="mt-6 space-y-3">
           {courses.map((c) => (
-            <Link key={c.id} href={`/guru/kelas/${c.id}/edit`} className="card-surface flex items-center justify-between p-5 transition-transform duration-200 ease-spring hover:-translate-y-0.5 hover:shadow-raised">
+            <Link key={c.id} href={`/guru/kelas/${c.id}`} className="card-surface flex items-center justify-between p-5 transition-transform duration-200 ease-spring hover:-translate-y-0.5 hover:shadow-raised">
               <div>
                 <p className="font-display font-semibold text-brand-900">{c.title}</p>
                 <p className="mt-1 text-xs capitalize text-parchment-500">

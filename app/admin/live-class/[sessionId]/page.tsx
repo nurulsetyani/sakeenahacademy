@@ -9,7 +9,7 @@ const ATTENDANCE_OPTIONS: { value: string; label: string }[] = [
   { value: "sakit", label: "Sakit" },
 ];
 
-export default async function LiveSessionDetailPage({ params }: { params: Promise<{ sessionId: string }> }) {
+export default async function AdminLiveSessionDetailPage({ params }: { params: Promise<{ sessionId: string }> }) {
   const { sessionId } = await params;
   const supabase = await createClient();
 

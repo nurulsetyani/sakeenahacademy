@@ -1,6 +1,6 @@
 import { createLesson } from "@/lib/actions/lessons";
 
-export default async function TambahMateriPage({ params }: { params: Promise<{ courseId: string }> }) {
+export default async function AdminTambahMateriPage({ params }: { params: Promise<{ courseId: string }> }) {
   const { courseId } = await params;
 
   return (

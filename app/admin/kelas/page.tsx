@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function AdminKelasPage() {
@@ -10,7 +11,10 @@ export default async function AdminKelasPage() {
 
   return (
     <div>
-      <h1 className="font-display text-2xl font-semibold text-brand-900">Kelola Kelas</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="font-display text-2xl font-semibold text-brand-900">Kelola Kelas</h1>
+        <Link href="/admin/kelas/baru" className="btn-primary !px-5 !py-2.5 text-sm">+ Kelas Baru</Link>
+      </div>
 
       <div className="mt-6 overflow-x-auto rounded-2xl border border-parchment-200 bg-white">
         <table className="w-full text-left text-sm">
@@ -25,8 +29,10 @@ export default async function AdminKelasPage() {
           </thead>
           <tbody>
             {courses?.map((c) => (
-              <tr key={c.id} className="border-b border-parchment-100 last:border-0">
-                <td className="px-5 py-3 font-medium text-parchment-800">{c.title}</td>
+              <tr key={c.id} className="border-b border-parchment-100 last:border-0 hover:bg-parchment-50">
+                <td className="px-5 py-3 font-medium text-parchment-800">
+                  <Link href={`/admin/kelas/${c.id}/edit`} className="hover:text-brand-700">{c.title}</Link>
+                </td>
                 <td className="px-5 py-3 text-parchment-600">
                   {(c.teacher as unknown as { full_name: string } | null)?.full_name}
                 </td>

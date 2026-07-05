@@ -11,26 +11,47 @@ export default async function GuruDashboardPage() {
     .from("courses")
     .select("id, title, status")
     .eq("teacher_id", user!.id)
-    .order("created_at", { ascending: false })
-    .limit(6);
+    .order("created_at", { ascending: false });
 
-  const publishedCount = courses?.filter((c) => c.status === "published").length ?? 0;
-  const draftCount = courses?.filter((c) => c.status === "draft").length ?? 0;
+  const courseIds = (courses ?? []).map((c) => c.id);
+
+  const [{ count: quizCount }, { data: schedules }] =
+    courseIds.length > 0
+      ? await Promise.all([
+          supabase.from("quizzes").select("id", { count: "exact", head: true }).in("course_id", courseIds),
+          supabase.from("tahsin_schedules").select("id").in("course_id", courseIds),
+        ])
+      : [{ count: 0 }, { data: [] }];
+
+  const scheduleIds = (schedules ?? []).map((s) => s.id);
+
+  const { data: assessedRows } =
+    scheduleIds.length > 0
+      ? await supabase
+          .from("tahsin_assessments")
+          .select("schedule_id")
+          .eq("teacher_id", user!.id)
+          .in("schedule_id", scheduleIds)
+      : { data: [] };
+
+  const assessedSet = new Set((assessedRows ?? []).map((a) => a.schedule_id));
+  const pendingAssessmentCount = scheduleIds.filter((id) => !assessedSet.has(id)).length;
+
+  const stats = [
+    { label: "Kelas Diampu", value: courses?.length ?? 0 },
+    { label: "Quiz & Ujian Dibuat", value: quizCount ?? 0 },
+    { label: "Sesi Tahsin Belum Dinilai", value: pendingAssessmentCount },
+  ];
 
   return (
     <div className="space-y-8">
       <div className="grid gap-4 sm:grid-cols-3">
-        <div className="card-surface p-6">
-          <p className="text-sm font-medium text-parchment-500">Kelas Published</p>
-          <p className="mt-2 font-display text-3xl font-semibold text-brand-900">{publishedCount}</p>
-        </div>
-        <div className="card-surface p-6">
-          <p className="text-sm font-medium text-parchment-500">Draft</p>
-          <p className="mt-2 font-display text-3xl font-semibold text-brand-900">{draftCount}</p>
-        </div>
-        <Link href="/guru/kelas/baru" className="card-surface flex flex-col justify-center p-6 transition-transform duration-200 ease-spring hover:-translate-y-0.5 hover:shadow-raised">
-          <p className="font-display text-base font-semibold text-brand-800">+ Buat Kelas Baru</p>
-        </Link>
+        {stats.map((s) => (
+          <div key={s.label} className="card-surface p-6">
+            <p className="text-sm font-medium text-parchment-500">{s.label}</p>
+            <p className="mt-2 font-display text-3xl font-semibold text-brand-900">{s.value}</p>
+          </div>
+        ))}
       </div>
 
       <div>
@@ -46,7 +67,7 @@ export default async function GuruDashboardPage() {
             {courses.map((c) => (
               <Link
                 key={c.id}
-                href={`/guru/kelas/${c.id}/edit`}
+                href={`/guru/kelas/${c.id}`}
                 className="card-surface block p-5 transition-transform duration-200 ease-spring hover:-translate-y-0.5 hover:shadow-raised"
               >
                 <p className="font-display text-base font-semibold text-brand-900">{c.title}</p>
@@ -62,10 +83,7 @@ export default async function GuruDashboardPage() {
           </div>
         ) : (
           <div className="card-surface mt-4 p-10 text-center">
-            <p className="text-sm text-parchment-600">Anda belum memiliki kelas.</p>
-            <Link href="/guru/kelas/baru" className="btn-primary mt-4 inline-flex">
-              Buat Kelas Pertama
-            </Link>
+            <p className="text-sm text-parchment-600">Anda belum ditugaskan ke kelas apa pun. Hubungi Admin.</p>
           </div>
         )}
       </div>

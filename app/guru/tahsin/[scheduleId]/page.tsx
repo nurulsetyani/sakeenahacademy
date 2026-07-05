@@ -1,21 +1,14 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { saveTahsinSession } from "@/lib/actions/tahsin";
+import { saveTahsinAssessment } from "@/lib/actions/tahsin";
 
-const ATTENDANCE_OPTIONS: { value: string; label: string }[] = [
-  { value: "hadir", label: "Hadir" },
-  { value: "tidak_hadir", label: "Tidak Hadir" },
-  { value: "izin", label: "Izin" },
-  { value: "sakit", label: "Sakit" },
-];
-
-export default async function TahsinSchedulePage({ params }: { params: Promise<{ scheduleId: string }> }) {
+export default async function TahsinAssessmentPage({ params }: { params: Promise<{ scheduleId: string }> }) {
   const { scheduleId } = await params;
   const supabase = await createClient();
 
   const { data: schedule } = await supabase
     .from("tahsin_schedules")
-    .select("id, course_id, session_date, start_time, end_time, location_or_link, course:courses(title)")
+    .select("id, course_id, session_date, start_time, end_time, course:courses(title)")
     .eq("id", scheduleId)
     .single();
 
@@ -27,17 +20,11 @@ export default async function TahsinSchedulePage({ params }: { params: Promise<{
     .eq("course_id", schedule.course_id)
     .eq("status", "active");
 
-  const { data: attendance } = await supabase
-    .from("tahsin_attendance")
-    .select("student_id, status")
-    .eq("schedule_id", scheduleId);
-
   const { data: assessments } = await supabase
     .from("tahsin_assessments")
     .select("student_id, makhraj_score, tajwid_score, kelancaran_score, overall_grade, notes")
     .eq("schedule_id", scheduleId);
 
-  const attendanceByStudent = new Map((attendance ?? []).map((a) => [a.student_id, a.status]));
   const assessmentByStudent = new Map((assessments ?? []).map((a) => [a.student_id, a]));
 
   return (
@@ -54,26 +41,17 @@ export default async function TahsinSchedulePage({ params }: { params: Promise<{
         <div className="mt-6 space-y-4">
           {enrollments.map((e) => {
             const student = e.student as unknown as { id: string; full_name: string } | null;
-            const currentAttendance = attendanceByStudent.get(e.student_id) ?? "tidak_hadir";
             const assessment = assessmentByStudent.get(e.student_id);
 
             return (
               <form
                 key={e.student_id}
-                action={saveTahsinSession.bind(null, scheduleId, e.student_id)}
+                action={saveTahsinAssessment.bind(null, scheduleId, e.student_id)}
                 className="card-surface p-6"
               >
                 <p className="font-display font-semibold text-brand-900">{student?.full_name}</p>
 
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label className="field-label">Kehadiran</label>
-                    <select name="attendance_status" defaultValue={currentAttendance} className="field-input">
-                      {ATTENDANCE_OPTIONS.map((opt) => (
-                        <option key={opt.value} value={opt.value}>{opt.label}</option>
-                      ))}
-                    </select>
-                  </div>
                   <div>
                     <label className="field-label">Nilai Keseluruhan</label>
                     <input name="overall_grade" defaultValue={assessment?.overall_grade ?? ""} className="field-input" placeholder="A / B / C" />

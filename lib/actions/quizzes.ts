@@ -80,7 +80,7 @@ export async function toggleQuizStatus(quizId: string, courseId: string, current
   if (error) throw new Error(error.message);
 
   revalidatePath(`/guru/kelas/${courseId}/quiz/${quizId}`);
-  revalidatePath(`/guru/kelas/${courseId}/edit`);
+  revalidatePath(`/guru/kelas/${courseId}`);
 }
 
 export async function addQuizQuestion(quizId: string, courseId: string, formData: FormData) {

@@ -1,9 +1,17 @@
 import { createClient } from "@/lib/supabase/server";
 import { createCourse } from "@/lib/actions/courses";
 
-export default async function BuatKelasPage() {
+export default async function AdminBuatKelasPage() {
   const supabase = await createClient();
-  const { data: categories } = await supabase.from("course_categories").select("id, name").order("name");
+  const [{ data: categories }, { data: teachers }] = await Promise.all([
+    supabase.from("course_categories").select("id, name").order("name"),
+    supabase
+      .from("profiles")
+      .select("id, full_name")
+      .eq("role", "guru")
+      .eq("account_status", "active")
+      .order("full_name"),
+  ]);
 
   return (
     <div className="max-w-xl">
@@ -13,6 +21,19 @@ export default async function BuatKelasPage() {
         <div>
           <label htmlFor="title" className="field-label">Judul Kelas</label>
           <input id="title" name="title" required className="field-input" placeholder="mis. Bahasa Arab Dasar" />
+        </div>
+
+        <div>
+          <label htmlFor="teacher_id" className="field-label">Guru Penanggung Jawab</label>
+          <select id="teacher_id" name="teacher_id" required className="field-input">
+            {teachers && teachers.length > 0 ? (
+              teachers.map((t) => (
+                <option key={t.id} value={t.id}>{t.full_name}</option>
+              ))
+            ) : (
+              <option value="">Belum ada guru aktif</option>
+            )}
+          </select>
         </div>
 
         <div>

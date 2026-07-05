@@ -9,6 +9,6 @@ export async function toggleCourseStatus(courseId: string, currentStatus: string
 
   await supabase.from("courses").update({ status: nextStatus }).eq("id", courseId);
 
-  revalidatePath("/guru/kelas");
-  revalidatePath(`/guru/kelas/${courseId}/edit`);
+  revalidatePath("/admin/kelas");
+  revalidatePath(`/admin/kelas/${courseId}/edit`);
 }

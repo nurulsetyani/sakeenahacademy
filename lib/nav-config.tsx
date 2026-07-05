@@ -52,17 +52,16 @@ export const MURID_SIDEBAR_ITEMS: NavItem[] = [
 
 export const GURU_BOTTOM_ITEMS: NavItem[] = [
   { href: "/guru/dashboard", label: "Beranda", icon: icon(ICONS.home) },
-  { href: "/guru/kelas", label: "Kelas", icon: icon(ICONS.book) },
-  { href: "/guru/presensi", label: "Presensi", icon: icon(ICONS.check) },
+  { href: "/guru/kelas", label: "Tugas", icon: icon(ICONS.book) },
+  { href: "/guru/tahsin", label: "Tahsin", icon: icon(ICONS.check) },
   { href: "/guru/notifikasi", label: "Notifikasi", icon: icon(ICONS.bell) },
   { href: "/guru/profil", label: "Profil", icon: icon(ICONS.user) },
 ];
 
 export const GURU_SIDEBAR_ITEMS: NavItem[] = [
   { href: "/guru/dashboard", label: "Beranda", icon: icon(ICONS.home) },
-  { href: "/guru/kelas", label: "Kelola Kelas", icon: icon(ICONS.book) },
-  { href: "/guru/presensi", label: "Presensi", icon: icon(ICONS.check) },
-  { href: "/guru/tahsin", label: "Tahsin", icon: icon(ICONS.star) },
+  { href: "/guru/kelas", label: "Tugas & Quiz", icon: icon(ICONS.book) },
+  { href: "/guru/tahsin", label: "Nilai Tahsin", icon: icon(ICONS.star) },
   { href: "/guru/tahfidz", label: "Tahfidz", icon: icon(ICONS.target) },
   { href: "/guru/notifikasi", label: "Notifikasi", icon: icon(ICONS.bell) },
   { href: "/guru/profil", label: "Profil", icon: icon(ICONS.user) },
@@ -81,6 +80,8 @@ export const ADMIN_SIDEBAR_ITEMS: NavItem[] = [
   { href: "/admin/pengguna", label: "Kelola Pengguna", icon: icon(ICONS.users) },
   { href: "/admin/kelas", label: "Kelola Kelas", icon: icon(ICONS.layers) },
   { href: "/admin/kategori", label: "Kelola Kategori", icon: icon(ICONS.tag) },
+  { href: "/admin/live-class", label: "Live Class", icon: icon(ICONS.video) },
+  { href: "/admin/tahsin", label: "Tahsin", icon: icon(ICONS.check) },
   { href: "/admin/pembayaran", label: "Kelola Pembayaran", icon: icon(ICONS.wallet) },
   { href: "/admin/sertifikat", label: "Kelola Sertifikat", icon: icon(ICONS.award) },
   { href: "/admin/laporan", label: "Laporan", icon: icon(ICONS.clipboard) },
