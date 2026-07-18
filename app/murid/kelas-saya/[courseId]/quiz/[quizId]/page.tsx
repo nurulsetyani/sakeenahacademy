@@ -47,7 +47,7 @@ export default async function KerjakanQuizPage({
             <p className="mt-2 font-display text-3xl font-semibold text-brand-900">{latestAttempt.score}</p>
             <span
               className={`mt-2 inline-block rounded-full px-3 py-1 text-xs font-semibold ${
-                latestAttempt.status === "lulus" ? "bg-brand-50 text-brand-700" : "bg-red-50 text-red-700"
+                latestAttempt.status === "lulus" ? "bg-success-50 text-success-700" : "bg-red-50 text-red-700"
               }`}
             >
               {latestAttempt.status === "lulus" ? "Lulus" : "Tidak Lulus"}

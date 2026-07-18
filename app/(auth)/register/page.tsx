@@ -100,7 +100,7 @@ export default function RegisterPage() {
                 onClick={() => setRole(r)}
                 className={`rounded-xl border px-4 py-2.5 text-sm font-medium capitalize transition-colors ${
                   role === r
-                    ? "border-brand-600 bg-brand-50 text-brand-800"
+                    ? "border-success-600 bg-success-50 text-success-800"
                     : "border-parchment-300 text-parchment-600 hover:border-parchment-400"
                 }`}
               >

@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createLessonQuiz, createExamQuiz } from "@/lib/actions/quizzes";
 
 const CONTENT_STATUS_STYLE: Record<string, string> = {
-  published: "bg-brand-50 text-brand-700",
+  published: "bg-success-50 text-success-700",
   draft: "bg-parchment-200 text-parchment-600",
 };
 
@@ -42,7 +42,7 @@ export default async function GuruKelasHubPage({ params }: { params: Promise<{ c
     <div className="max-w-xl">
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl font-semibold text-brand-900">{course.title}</h1>
-        <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${course.status === "published" ? "bg-brand-50 text-brand-700" : "bg-parchment-200 text-parchment-600"}`}>
+        <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${course.status === "published" ? "bg-success-50 text-success-700" : "bg-parchment-200 text-parchment-600"}`}>
           {course.status}
         </span>
       </div>

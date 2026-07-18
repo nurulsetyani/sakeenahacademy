@@ -38,7 +38,7 @@ export default async function AdminSertifikatPage() {
               </div>
 
               <div className="flex items-center gap-3">
-                <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${c.status === "aktif" ? "bg-brand-50 text-brand-700" : "bg-red-50 text-red-700"}`}>
+                <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${c.status === "aktif" ? "bg-success-50 text-success-700" : "bg-red-50 text-red-700"}`}>
                   {c.status}
                 </span>
                 <form action={toggleCertificateStatus.bind(null, c.id, c.status)}>

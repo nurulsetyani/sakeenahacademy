@@ -73,7 +73,7 @@ export default async function GuruDashboardPage() {
                 <p className="font-display text-base font-semibold text-brand-900">{c.title}</p>
                 <span
                   className={`mt-2 inline-block rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${
-                    c.status === "published" ? "bg-brand-50 text-brand-700" : "bg-parchment-200 text-parchment-600"
+                    c.status === "published" ? "bg-success-50 text-success-700" : "bg-parchment-200 text-parchment-600"
                   }`}
                 >
                   {c.status}

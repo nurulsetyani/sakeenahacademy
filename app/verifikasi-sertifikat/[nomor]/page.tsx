@@ -22,7 +22,7 @@ export default async function VerifikasiSertifikatResultPage({
             <>
               <div
                 className={`mx-auto flex h-14 w-14 items-center justify-center rounded-full ${
-                  result.status === "aktif" ? "bg-brand-50 text-brand-700" : "bg-red-50 text-red-600"
+                  result.status === "aktif" ? "bg-success-50 text-success-700" : "bg-red-50 text-red-600"
                 }`}
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7">

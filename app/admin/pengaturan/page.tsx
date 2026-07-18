@@ -49,7 +49,7 @@ export default async function AdminPengaturanPage() {
                       </>
                     )}
                   </div>
-                  <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${c.is_active ? "bg-brand-50 text-brand-700" : "bg-parchment-200 text-parchment-600"}`}>
+                  <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${c.is_active ? "bg-success-50 text-success-700" : "bg-parchment-200 text-parchment-600"}`}>
                     {c.is_active ? "Aktif" : "Nonaktif"}
                   </span>
                 </div>

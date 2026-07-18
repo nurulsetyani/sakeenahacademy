@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createLiveSession } from "@/lib/actions/live-class";
 
 const STATUS_STYLE: Record<string, string> = {
-  terjadwal: "bg-brand-50 text-brand-700",
+  terjadwal: "bg-success-50 text-success-700",
   berlangsung: "bg-gold-100 text-gold-700",
   selesai: "bg-parchment-200 text-parchment-600",
   dibatalkan: "bg-red-50 text-red-700",

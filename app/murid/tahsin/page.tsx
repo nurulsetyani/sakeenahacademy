@@ -8,7 +8,7 @@ const ATTENDANCE_LABEL: Record<string, string> = {
 };
 
 const ATTENDANCE_STYLE: Record<string, string> = {
-  hadir: "bg-brand-50 text-brand-700",
+  hadir: "bg-success-50 text-success-700",
   tidak_hadir: "bg-red-50 text-red-700",
   izin: "bg-gold-100 text-gold-700",
   sakit: "bg-gold-100 text-gold-700",

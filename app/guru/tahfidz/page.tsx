@@ -4,11 +4,11 @@ import { createTahfidzTarget, recordTahfidzSetoran } from "@/lib/actions/tahfidz
 const TARGET_STATUS_STYLE: Record<string, string> = {
   belum_mulai: "bg-parchment-200 text-parchment-600",
   proses: "bg-gold-100 text-gold-700",
-  selesai: "bg-brand-50 text-brand-700",
+  selesai: "bg-success-50 text-success-700",
 };
 
 const SETORAN_STATUS_STYLE: Record<string, string> = {
-  lancar: "bg-brand-50 text-brand-700",
+  lancar: "bg-success-50 text-success-700",
   perlu_perbaikan: "bg-gold-100 text-gold-700",
   mengulang: "bg-red-50 text-red-700",
 };

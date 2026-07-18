@@ -59,7 +59,7 @@ export default async function BelajarKelasPage({ params }: { params: Promise<{ c
                     <p className="mt-0.5 text-xs text-parchment-500">{l.estimated_duration_minutes} menit</p>
                   )}
                 </div>
-                <span className={`rounded-full px-3 py-1 text-xs font-semibold ${done ? "bg-brand-50 text-brand-700" : "bg-parchment-200 text-parchment-600"}`}>
+                <span className={`rounded-full px-3 py-1 text-xs font-semibold ${done ? "bg-success-50 text-success-700" : "bg-parchment-200 text-parchment-600"}`}>
                   {done ? "Selesai" : "Belum Selesai"}
                 </span>
               </Link>

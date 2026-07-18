@@ -27,7 +27,7 @@ export default async function CertificateTemplatePage() {
                 </p>
               </div>
               <div className="flex items-center gap-3">
-                <span className={`rounded-full px-3 py-1 text-xs font-semibold ${t.is_active ? "bg-brand-50 text-brand-700" : "bg-parchment-200 text-parchment-600"}`}>
+                <span className={`rounded-full px-3 py-1 text-xs font-semibold ${t.is_active ? "bg-success-50 text-success-700" : "bg-parchment-200 text-parchment-600"}`}>
                   {t.is_active ? "Aktif" : "Nonaktif"}
                 </span>
                 <form action={toggleCertificateTemplateActive.bind(null, t.id, t.is_active)}>

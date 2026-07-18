@@ -73,6 +73,22 @@ const config: Config = {
           800: "#8A280D",
           900: "#6B210E",
         },
+        // Dedicated semantic "positive/active" color — brand and parchment now
+        // share the same neutral ink values, so status badges that used to pair
+        // bg-brand-50/text-brand-700 (active) against bg-parchment-200 (inactive)
+        // need their own hue to stay visually distinguishable.
+        success: {
+          50: "#EDFCF4",
+          100: "#D3F8E4",
+          200: "#A6F0C7",
+          300: "#6FE0A8",
+          400: "#3FCB88",
+          500: "#1EA968",
+          600: "#128754",
+          700: "#0E6C44",
+          800: "#0C5636",
+          900: "#0A4029",
+        },
       },
       fontFamily: {
         display: ["var(--font-display)", "serif"],

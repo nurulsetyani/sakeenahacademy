@@ -28,7 +28,7 @@ export default async function GuruKelasListPage() {
                   {c.program_type} &middot; {c.access_type}
                 </p>
               </div>
-              <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${c.status === "published" ? "bg-brand-50 text-brand-700" : "bg-parchment-200 text-parchment-600"}`}>
+              <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${c.status === "published" ? "bg-success-50 text-success-700" : "bg-parchment-200 text-parchment-600"}`}>
                 {c.status}
               </span>
             </Link>

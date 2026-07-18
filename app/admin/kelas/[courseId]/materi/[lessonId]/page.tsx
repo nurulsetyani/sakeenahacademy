@@ -23,7 +23,7 @@ export default async function AdminEditMateriPage({
     <div className="max-w-xl">
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl font-semibold text-brand-900">{lesson.title}</h1>
-        <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${lesson.status === "published" ? "bg-brand-50 text-brand-700" : "bg-parchment-200 text-parchment-600"}`}>
+        <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${lesson.status === "published" ? "bg-success-50 text-success-700" : "bg-parchment-200 text-parchment-600"}`}>
           {lesson.status}
         </span>
       </div>

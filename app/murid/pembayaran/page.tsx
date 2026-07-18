@@ -11,7 +11,7 @@ const STATUS_LABEL: Record<string, string> = {
 const STATUS_STYLE: Record<string, string> = {
   pending: "bg-parchment-200 text-parchment-700",
   menunggu_verifikasi: "bg-gold-100 text-gold-700",
-  approved: "bg-brand-50 text-brand-700",
+  approved: "bg-success-50 text-success-700",
   rejected: "bg-red-50 text-red-700",
 };
 

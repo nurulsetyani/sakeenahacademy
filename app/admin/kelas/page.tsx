@@ -39,7 +39,7 @@ export default async function AdminKelasPage() {
                 <td className="px-5 py-3 capitalize text-parchment-600">{c.program_type}</td>
                 <td className="px-5 py-3 capitalize text-parchment-600">{c.access_type}</td>
                 <td className="px-5 py-3">
-                  <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${c.status === "published" ? "bg-brand-50 text-brand-700" : "bg-parchment-200 text-parchment-600"}`}>
+                  <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${c.status === "published" ? "bg-success-50 text-success-700" : "bg-parchment-200 text-parchment-600"}`}>
                     {c.status}
                   </span>
                 </td>

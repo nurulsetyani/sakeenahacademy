@@ -77,7 +77,7 @@ export default async function LihatMateriPage({
 
       <div className="mt-8 flex flex-wrap items-center gap-3">
         {isDone ? (
-          <span className="rounded-full bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-700">Materi Selesai</span>
+          <span className="rounded-full bg-success-50 px-4 py-2 text-sm font-semibold text-success-700">Materi Selesai</span>
         ) : (
           <form action={markLessonComplete.bind(null, lessonId, enrollment.id, courseId)}>
             <button type="submit" className="btn-primary !px-5 !py-2.5 text-sm">Tandai Selesai</button>

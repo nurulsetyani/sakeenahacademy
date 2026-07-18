@@ -72,7 +72,7 @@ export default async function AdminLaporanPage() {
             {categoryRows.map((row) => (
               <div key={row.name} className="card-surface flex items-center justify-between p-4">
                 <p className="text-sm font-semibold text-brand-900">{row.name}</p>
-                <span className="rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">{row.count} kelas</span>
+                <span className="rounded-full bg-success-50 px-3 py-1 text-xs font-semibold text-success-700">{row.count} kelas</span>
               </div>
             ))}
           </div>
