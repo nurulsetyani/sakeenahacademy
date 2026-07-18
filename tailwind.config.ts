@@ -42,6 +42,33 @@ const config: Config = {
           800: "#322B20",
           900: "#1C1712",
         },
+        // v2 design system (public pages redesign) — additive, does not replace
+        // brand/gold/parchment which the dashboard still relies on.
+        ink: {
+          50: "#F7F7F8",
+          100: "#EEEEF0",
+          200: "#DEDEE3",
+          300: "#C4C4CC",
+          400: "#9C9CA8",
+          500: "#71717E",
+          600: "#52525F",
+          700: "#3A3A45",
+          800: "#212128",
+          900: "#121216",
+          950: "#08080A",
+        },
+        ember: {
+          50: "#FFF3EC",
+          100: "#FFE1D0",
+          200: "#FFC1A1",
+          300: "#FF9A6B",
+          400: "#FF7A42",
+          500: "#F2591E",
+          600: "#D6430F",
+          700: "#B1330C",
+          800: "#8A280D",
+          900: "#6B210E",
+        },
       },
       fontFamily: {
         display: ["var(--font-display)", "serif"],
@@ -52,6 +79,10 @@ const config: Config = {
         raised: "0 4px 8px -2px rgba(11, 56, 42, 0.16), 0 12px 24px -8px rgba(11, 56, 42, 0.14)",
         floating: "0 8px 16px -4px rgba(11, 56, 42, 0.20), 0 24px 48px -12px rgba(11, 56, 42, 0.22)",
         gold: "0 4px 14px -2px rgba(204, 154, 62, 0.35)",
+        // v2
+        "ink-soft": "0 1px 2px -1px rgba(8, 8, 10, 0.06), 0 4px 16px -4px rgba(8, 8, 10, 0.08)",
+        "ink-raised": "0 6px 16px -4px rgba(8, 8, 10, 0.10), 0 16px 40px -12px rgba(8, 8, 10, 0.14)",
+        "ember-glow": "0 8px 24px -6px rgba(242, 89, 30, 0.45), 0 2px 8px -2px rgba(242, 89, 30, 0.3)",
       },
       backgroundImage: {
         "grain": "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E\")",

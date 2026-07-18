@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { PublicTopbar } from "@/components/landing/public-topbar";
+import { FadeInStagger, FadeInItem } from "@/components/landing/motion";
 
 export default async function KatalogKelasPage() {
   const supabase = await createClient();
@@ -14,34 +15,41 @@ export default async function KatalogKelasPage() {
   return (
     <>
       <PublicTopbar />
-      <main className="container-page py-14">
-        <h1 className="font-display text-3xl font-semibold tracking-[-0.02em] text-brand-900 sm:text-4xl">
-          Katalog Kelas
-        </h1>
-        <p className="mt-3 max-w-lg text-parchment-600">
-          Kelas gratis dan berbayar, Tahsin, Tahfidz — semua dalam satu tempat.
-        </p>
+      <main className="min-h-screen bg-ink-50">
+        <div className="container-page py-14">
+          <h1 className="font-display text-3xl font-semibold tracking-[-0.02em] text-ink-950 sm:text-4xl">
+            Katalog Kelas
+          </h1>
+          <p className="mt-3 max-w-lg text-ink-500">
+            Kelas gratis dan berbayar, Tahsin, Tahfidz — semua dalam satu tempat.
+          </p>
 
-        {courses && courses.length > 0 ? (
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {courses.map((c) => (
-              <Link key={c.id} href={`/kelas/${c.slug}`} className="card-surface block p-6 transition-transform duration-200 ease-spring hover:-translate-y-1 hover:shadow-raised">
-                <span className="text-xs font-semibold uppercase tracking-wide text-gold-600">
-                  {(c.category as unknown as { name: string } | null)?.name ?? c.program_type}
-                </span>
-                <h2 className="mt-2 font-display text-lg font-semibold text-brand-900">{c.title}</h2>
-                <p className="mt-2 line-clamp-2 text-sm text-parchment-600">{c.description}</p>
-                <p className="mt-4 text-sm font-semibold text-brand-800">
-                  {c.access_type === "berbayar" ? `Rp${Number(c.price).toLocaleString("id-ID")}` : "Gratis"}
-                </p>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <div className="card-surface mt-10 p-14 text-center">
-            <p className="text-sm text-parchment-600">Belum ada kelas yang dipublikasikan.</p>
-          </div>
-        )}
+          {courses && courses.length > 0 ? (
+            <FadeInStagger className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {courses.map((c) => (
+                <FadeInItem key={c.id}>
+                  <Link
+                    href={`/kelas/${c.slug}`}
+                    className="group block h-full rounded-2xl border border-ink-900/8 bg-white p-6 shadow-ink-soft transition-transform duration-200 ease-spring hover:-translate-y-1 hover:shadow-ink-raised"
+                  >
+                    <span className="text-xs font-semibold uppercase tracking-wide text-ember-600">
+                      {(c.category as unknown as { name: string } | null)?.name ?? c.program_type}
+                    </span>
+                    <h2 className="mt-2 font-display text-lg font-semibold text-ink-950 group-hover:text-ember-600">{c.title}</h2>
+                    <p className="mt-2 line-clamp-2 text-sm text-ink-500">{c.description}</p>
+                    <p className="mt-4 text-sm font-semibold text-ink-800">
+                      {c.access_type === "berbayar" ? `Rp${Number(c.price).toLocaleString("id-ID")}` : "Gratis"}
+                    </p>
+                  </Link>
+                </FadeInItem>
+              ))}
+            </FadeInStagger>
+          ) : (
+            <div className="mt-10 rounded-2xl border border-ink-900/8 bg-white p-14 text-center shadow-ink-soft">
+              <p className="text-sm text-ink-500">Belum ada kelas yang dipublikasikan.</p>
+            </div>
+          )}
+        </div>
       </main>
     </>
   );
